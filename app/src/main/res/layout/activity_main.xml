@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -10,6 +11,9 @@
         android:id="@+id/rl_video_content"
         android:layout_width="match_parent"
         android:layout_height="360dp">
+
+
+
 
         <management.lxgdgj.com.xmcamera.widget.FunVideoView
             android:id="@+id/mFunVideoView"
@@ -19,7 +23,65 @@
             android:minHeight="300dp" />
 
         <LinearLayout
-            android:id="@+id/horizontal_screen_operation"
+            android:visibility="gone"
+            android:id="@+id/controller2"
+            android:layout_marginBottom="13dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btn_h_screenshot"
+                android:layout_marginRight="23dp"
+                android:src="@drawable/icon_camera_h_screenshot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/btn_h_video"
+                android:layout_marginRight="23dp"
+                android:src="@drawable/icon_camera_h_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:layout_marginRight="23dp"
+                android:src="@drawable/icon_camera_h_talkback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/btn_portrait_screen"
+                android:layout_marginRight="23dp"
+                android:src="@drawable/icon_camera_portrait_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <RelativeLayout
+            android:background="#99000000"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:gravity="center_vertical"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/white"
+
+                android:text="摄像头名称"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"/>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/controller1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/mFunVideoView"
@@ -56,6 +118,7 @@
                 android:background="#474747" />
 
             <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/btn_landscape"
                 android:layout_width="50dp"
                 android:layout_height="37dp"
                 android:gravity="center"
@@ -67,6 +130,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/controller3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
@@ -84,7 +148,7 @@
             android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/btn_screenshot"
+            android:id="@+id/btn_v_screenshot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -95,7 +159,7 @@
             android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/btn_video"
+            android:id="@+id/btn_v_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

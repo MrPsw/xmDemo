@@ -21,11 +21,13 @@ import management.lxgdgj.com.xmcamera.listener.OnFunDeviceOptListener
 import management.lxgdgj.com.xmcamera.models.FunDevType
 import management.lxgdgj.com.xmcamera.models.FunDevice
 import management.lxgdgj.com.xmcamera.sdk.struct.H264_DVR_FILE_DATA
+import management.lxgdgj.com.xmcamera.utils.ScreenUtils
 
 
 class MainActivity : AppCompatActivity(), OnFunDeviceOptListener {
 
     private var mFunDevice: FunDevice? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,19 +64,25 @@ class MainActivity : AppCompatActivity(), OnFunDeviceOptListener {
     }
 
     private fun initOperating() {
-        btn_screenshot.setOnClickListener {
-            val filePath = mFunVideoView.captureImage(null)
-            if (TextUtils.isEmpty(filePath)) {
-                showToast("抓拍失败")
-            } else {
-                showToast("抓拍成功 存储:" + filePath)
-            }
-        }
+
+        btn_v_screenshot.setOnClickListener(operateOnClick)
+        btn_h_screenshot.setOnClickListener(operateOnClick)
+
+        btn_v_video.setOnClickListener(operateOnClick)
+        btn_h_video.setOnClickListener(operateOnClick)
+
+
         btn_talkback.setOnClickListener {
             val result = FunSupport.getInstance().requestDeviceStartTalk(mFunDevice)
-            showToast("开启成功")
+            showToast("开启成功" + result)
         }
 
+        btn_portrait_screen.setOnClickListener {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        }
+        btn_landscape.setOnClickListener {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
 
     }
 
@@ -154,12 +162,14 @@ class MainActivity : AppCompatActivity(), OnFunDeviceOptListener {
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //当前为横屏， 在此处添加额外的处理代码
             runOnUiThread {
-                //vertical_screen_operation.visibility = View.GONE
-                horizontal_screen_operation.visibility = View.VISIBLE
+
+                controller1.visibility = View.GONE
+                controller2.visibility = View.VISIBLE
+                controller3.visibility = View.GONE
                 rl_video_content.layoutParams.apply {
                     height = RelativeLayout.LayoutParams.MATCH_PARENT
                 }
-
+                ScreenUtils.enterFullScreen(this)
             }
             Toast.makeText(this, "横屏", Toast.LENGTH_SHORT).show()
             Log.e("打印日志", "横屏")
@@ -167,18 +177,53 @@ class MainActivity : AppCompatActivity(), OnFunDeviceOptListener {
         } else if (this.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             //当前为竖屏， 在此处添加额外的处理代码
             runOnUiThread {
-                //vertical_screen_operation.visibility = View.VISIBLE
-                horizontal_screen_operation.visibility = View.GONE
+                controller1.visibility = View.VISIBLE
+                controller2.visibility = View.GONE
+                controller3.visibility = View.VISIBLE
             }
+
+            ScreenUtils.exitFullScreen(this)
             Toast.makeText(this, "竖屏", Toast.LENGTH_SHORT).show()
             Log.e("打印日志", "竖屏")
         }
 
     }
 
+    private val operateOnClick = View.OnClickListener { v ->
+        when (v?.id) {
+            R.id.btn_v_screenshot, R.id.btn_h_screenshot -> {
+                val filePath = mFunVideoView.captureImage(null)
+                if (TextUtils.isEmpty(filePath)) {
+                    showToast("抓拍失败")
+                } else {
+                    showToast("抓拍成功 存储:" + filePath)
+                }
+            }
+            R.id.btn_v_video, R.id.btn_h_video -> {
+                if (mFunVideoView.bRecord) {
+                    mFunVideoView.stopRecordVideo()
+                    showToast("录制完成 存储:" + mFunVideoView.filePath)
+                } else {
+                    mFunVideoView.startRecordVideo(null)
+                    showToast("开启录制功能，再次点击停止录制")
+                }
+
+            }
+
+        }
+    }
+
+
+    fun initHorizontalScreenOperation() {
+        mFunVideoView.setOnTouchListener { v, event ->
+            when(event.action){
+
+            }
+        }
+    }
+
 
     private fun updateFunVideoViewSize() {
-
         if (this.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //当前为横屏， 在此处添加额外的处理代码
             rl_video_content.layoutParams.apply {
